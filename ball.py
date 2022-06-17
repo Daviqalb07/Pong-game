@@ -1,9 +1,6 @@
 import pygame as pg
 from random import choice
-BALL_COLOR = (230, 97, 9)
-BALL_RADIUS = 10
-SPEED_X = 5
-SPEED_Y = 5
+from properties import *
 
 class Ball:
     def __init__(self, x: int, y: int):

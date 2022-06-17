@@ -1,15 +1,14 @@
 import pygame as pg
 from ball import Ball
-
-PLAYER_COLOR = (217, 217, 217)
-PLAYER_HEIGHT = 150
-PLAYER_WIDTH = 15
-PLAYER_SPEED = 5
+from properties import *
 
 class Player:
-    def __init__(self,x: int, y: int):
-        self.x = x
-        self.y = y
+    def __init__(self, number: int):
+        if number == 1:
+            self.x = 0
+        else:
+            self.x = TABLE_WIDTH - PLAYER_WIDTH
+        self.y = (TABLE_HEIGHT-PLAYER_HEIGHT)/2
 
     def draw(self, table: pg.surface.Surface):
         player_rect = pg.Rect(self.x, self.y, PLAYER_WIDTH, PLAYER_HEIGHT)

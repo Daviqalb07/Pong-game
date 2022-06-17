@@ -1,23 +1,27 @@
 import pygame as pg
 import time
+import socket
+
 from ball import Ball
 from player import *
+from properties import *
 
-
-TABLE_COLOR = (23, 21, 38)
-WINDOW_HEIGHT = 400
-WINDOW_WIDTH = 720
 
 def main():
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect((SERVER_IP, SERVER_PORT))
     pg.init()
     pg.display.init()
 
-
-    window_size = (WINDOW_WIDTH, WINDOW_HEIGHT)
+    while True:
+        number = int(client.recv(2048).decode("utf-8"))
+        if number in [1, 2]:
+            break
+    window_size = (TABLE_WIDTH, TABLE_HEIGHT)
     table = pg.display.set_mode(window_size)
     pg.display.set_caption("Pong Game")
 
-    player1 = Player(0, (WINDOW_HEIGHT-PLAYER_HEIGHT)/2)
+    player1 = Player(number)
     ball = None
 
     run = True
@@ -25,7 +29,7 @@ def main():
 
     while run:
         if reset:
-            ball = Ball(WINDOW_WIDTH/2, WINDOW_HEIGHT/2)
+            ball = Ball(TABLE_WIDTH/2, TABLE_HEIGHT/2)
             reset = False
 
         for event in pg.event.get():
@@ -47,12 +51,12 @@ def main():
         ball_y = ball.get_y()
         ball_radius = ball.get_radius()
 
-        if ball_x - ball_radius < PLAYER_WIDTH or ball_x + ball_radius > WINDOW_WIDTH:
+        if ball_x - ball_radius < PLAYER_WIDTH or ball_x + ball_radius > TABLE_WIDTH - PLAYER_WIDTH:
             if not player1.collide_with_ball(ball):
                 # Resetando a posição da bola
                 reset = True
 
-        if ball_y - ball_radius < 0 or ball_y + ball_radius > WINDOW_HEIGHT:
+        if ball_y - ball_radius < 0 or ball_y + ball_radius > TABLE_HEIGHT:
             ball.reflect_y()
         
         time.sleep(1/60) # 60 fps
