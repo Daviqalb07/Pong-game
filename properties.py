@@ -20,3 +20,4 @@ SPEED_Y = 5
 # Socket's default properties
 SERVER_IP = "localhost"
 SERVER_PORT = 2022
+BUFF_SIZE = 5120
