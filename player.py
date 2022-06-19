@@ -6,6 +6,20 @@ def draw_opponent(x: int, y: int, table: pg.Surface):
     opponent_rect = pg.Rect(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
     pg.draw.rect(table, PLAYER_COLOR, opponent_rect)
 
+def collided_in_x(number: int, player_x: int, ball_x: int):
+        if number == 1:
+            return (ball_x - BALL_RADIUS) < PLAYER_WIDTH
+        
+        else: # if player's number equals 2
+            return (ball_x + BALL_RADIUS) > player_x 
+
+def collided_in_y(player_y: int, ball_y: int) -> bool:
+    conditions = [
+        (ball_y - BALL_RADIUS) < (player_y + PLAYER_HEIGHT),
+        (ball_y + BALL_RADIUS) > player_y
+    ]
+    return all(conditions)
+
 class Player:
     def __init__(self, number: int):
         self.number = number
@@ -26,32 +40,4 @@ class Player:
         self.y = min(self.y + PLAYER_SPEED, window_height-PLAYER_HEIGHT)
 
     def player_info(self):
-        return f'player-position {self.number} {int(self.x)} {int(self.y)} '
-    
-    def collided_in_x(self, ball_x):
-        if self.number == 1:
-            return (ball_x - BALL_RADIUS) < PLAYER_WIDTH
-        
-        else: # if player's number equals 2
-            return (ball_x + BALL_RADIUS) > self.x
-    
-    def collided_in_y(self, ball_y) -> bool:
-        conditions = [
-            (ball_y - BALL_RADIUS) < (self.y + PLAYER_HEIGHT),
-            (ball_y + BALL_RADIUS) > self.y
-        ]
-        return all(conditions)
-        
-    def collided_with_ball(self, ball_x, ball_y) -> bool:
-        if self.number == 1 and (ball_x - BALL_RADIUS) < PLAYER_WIDTH:
-            if ball_y < (self.y + PLAYER_HEIGHT + BALL_RADIUS) and ball_y > (self.y - BALL_RADIUS):
-                return True
-            else:
-                return False
-        elif self.number == 2 and (ball_x + BALL_RADIUS) > self.x:
-            if ball_y < (self.y + PLAYER_HEIGHT + BALL_RADIUS) and ball_y > (self.y - BALL_RADIUS):
-                return True
-            else:
-                return False
-        else:
-            return False
+        return f'player-position {int(self.x)} {int(self.y)} '
